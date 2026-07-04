@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Arts Subject Combination Checker</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,Arial,sans-serif;
+}
+
+body{
+
+    background:#eef2f7;
+    padding:30px;
+
+}
+
+.container{
+
+    width:850px;
+    margin:auto;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+
+    overflow:hidden;
+
+}
+
+.header{
+
+    background:#0B5ED7;
+
+    color:white;
+
+    text-align:center;
+
+    padding:18px;
+
+}
+
+.header h2{
+
+    font-weight:600;
+
+}
+
+.content{
+
+    padding:30px;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+td{
+
+    padding:10px;
+
+}
+
+label{
+
+    font-weight:600;
+
+}
+
+select{
+
+    width:100%;
+
+    padding:10px;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
+    font-size:15px;
+
+}
+
+select:focus{
+
+    outline:none;
+
+    border-color:#0B5ED7;
+
+}
+
+.buttonRow{
+
+    margin-top:25px;
+
+    text-align:center;
+
+}
+
+button{
+
+    padding:12px 30px;
+
+    border:none;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    margin:5px;
+
+}
+
+#checkBtn{
+
+    background:#0B5ED7;
+
+    color:white;
+
+}
+
+#resetBtn{
+
+    background:#6c757d;
+
+    color:white;
+
+}
+
+#result{
+
+    margin-top:25px;
+
+    padding:18px;
+
+    border-radius:8px;
+
+    display:none;
+
+    font-size:18px;
+
+    font-weight:600;
+
+}
+
+.valid{
+
+    background:#d1e7dd;
+
+    color:#0f5132;
+
+    border:1px solid #badbcc;
+
+}
+
+.invalid{
+
+    background:#f8d7da;
+
+    color:#842029;
+
+    border:1px solid #f5c2c7;
+
+}
+
+#status{
+
+    margin-top:20px;
+
+    background:#fff8e5;
+
+    border:1px solid #ffe58a;
+
+    padding:15px;
+
+    border-radius:8px;
+
+    display:none;
+
+}
+
+#status h3{
+
+    margin-bottom:10px;
+
+}
+
+ul{
+
+    padding-left:20px;
+
+}
+
+.footer{
+
+    text-align:center;
+
+    padding:15px;
+
+    color:#666;
+
+    font-size:13px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<h2>ARTS SUBJECT COMBINATION CHECKER</h2>
+
+</div>
+
+<div class="content">
+
+<table>
+
+<tr>
+
+<td width="35%">
+<label>Compulsory</label>
+</td>
+
+<td>
+
+<input type="text"
+value="English"
+readonly
+style="width:100%;padding:10px;border:1px solid #ccc;border-radius:6px;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<label>MIL</label>
+
+</td>
+
+<td>
+
+<select id="mil">
+
+<option value="">Select MIL</option>
+
+</select>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<label>Subject 1</label>
+
+</td>
+
+<td>
+
+<select id="s1">
+
+<option value="">Select Subject</option>
+
+</select>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<label>Subject 2</label>
+
+</td>
+
+<td>
+
+<select id="s2">
+
+<option value="">Select Subject</option>
+
+</select>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<label>Subject 3</label>
+
+</td>
+
+<td>
+
+<select id="s3">
+
+<option value="">Select Subject</option>
+
+</select>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<label>Subject 4</label>
+
+</td>
+
+<td>
+
+<select id="s4">
+
+<option value="">Select Subject</option>
+
+</select>
+
+</td>
+
+</tr>
+
+</table>
+
+<div class="buttonRow">
+
+<button id="checkBtn">
+
+Check Combination
+
+</button>
+
+<button id="resetBtn">
+
+Reset
+
+</button>
+
+</div>
+
+<div id="result">
+
+</div>
+
+<div id="status">
+
+<h3>Validation Details</h3>
+
+<ul id="statusList">
+
+</ul>
+
+</div>
+
+</div>
+
+<div class="footer">
+
+Offline Subject Combination Checker
+
+</div>
+
+</div>
+<script>
+
+// ==========================
+// SUBJECT MASTER
+// ==========================
+
+const subjects = {
+
+    mil : [
+
+        "Alternative English",
+        "Hindi",
+        "Odia",
+        "Sanskrit"
+
+    ],
+
+    core : [
+
+        "Political Science",
+        "Economics",
+        "Logic",
+        "History",
+        "Sociology"
+
+    ],
+
+    practical : [
+
+        "Psychology",
+        "Home Science",
+        "Music",
+        "IT & ITES",
+        "Retail"
+
+    ],
+
+    language : [
+
+        "Language Odia",
+        "Language Hindi",
+        "Language Sanskrit"
+
+    ]
+
+};
+
+
+// ==========================
+// SECTION RESTRICTIONS
+// ==========================
+
+const sectionRestriction={
+
+    "Psychology":["A"],
+
+    "Home Science":["D"],
+
+    "Music":["C"],
+
+    "IT & ITES":["B"],
+
+    "Retail":["B"],
+
+    "Sociology":["A","B"],
+	
+	"Language Odia":["C","D"],
+
+    "Language Hindi":["C","D"],
+
+    "Language Sanskrit":["C","D"]
+
+};
+
+
+// ==========================
+// CONFLICT RULES
+// ==========================
+
+const conflictRules={
+
+"Psychology":[
+
+"Home Science",
+"Music",
+"Retail",
+"IT & ITES",
+"Language Odia",
+"Language Hindi",
+"Language Sanskrit"
+
+],
+
+"Home Science":[
+
+"Psychology",
+"Sociology",
+"Music",
+"Retail",
+"IT & ITES"
+
+],
+
+"Music":[
+
+"Psychology",
+"Sociology",
+"Home Science",
+"Retail",
+"IT & ITES"
+
+],
+
+"Retail":[
+
+"Psychology",
+"Home Science",
+"Music",
+"Sociology",
+"IT & ITES",
+"Language Odia",
+"Language Hindi",
+"Language Sanskrit"
+
+],
+
+"IT & ITES":[
+
+"Psychology",
+"Home Science",
+"Music",
+"Retail",
+"Sociology",
+"Language Odia",
+"Language Hindi",
+"Language Sanskrit"
+
+],
+
+"Language Sanskrit":[
+
+"Language Odia",
+"Sociology",
+"Language Hindi"
+
+],
+
+"Language Odia":[
+
+"Language Sanskrit",
+"Sociology",
+"Language Hindi"
+
+],
+
+"Sociology":[
+
+"Language Hindi"
+
+]
+
+};
+
+
+// ==========================
+// PRACTICAL SUBJECTS
+// ==========================
+
+const practicalSubjects=[
+
+"Psychology",
+"Home Science",
+"Music",
+"Retail",
+"IT & ITES"
+
+];
+
+
+// ==========================
+// POPULATE MIL
+// ==========================
+
+function populateMIL(){
+
+const mil=document.getElementById("mil");
+
+subjects.mil.forEach(subject=>{
+
+let option=document.createElement("option");
+
+option.value=subject;
+
+option.textContent=subject;
+
+mil.appendChild(option);
+
+});
+
+}
+
+
+// ==========================
+// POPULATE SUBJECT DROPDOWNS
+// ==========================
+
+function populateSubjects(){
+
+for(let i=1;i<=4;i++){
+
+const ddl=document.getElementById("s"+i);
+
+addGroup(
+ddl,
+"Core Subjects",
+subjects.core
+);
+
+addGroup(
+ddl,
+"Practical Subjects",
+subjects.practical
+);
+
+addGroup(
+ddl,
+"Language Subjects",
+subjects.language
+);
+
+}
+
+}
+
+
+// ==========================
+// CREATE OPTION GROUP
+// ==========================
+
+function addGroup(dropdown,label,list){
+
+const group=document.createElement("optgroup");
+
+group.label=label;
+
+list.forEach(subject=>{
+
+let option=document.createElement("option");
+
+option.value=subject;
+
+option.textContent=subject;
+
+group.appendChild(option);
+
+});
+
+dropdown.appendChild(group);
+
+}
+
+
+// ==========================
+// INITIALIZE
+// ==========================
+
+populateMIL();
+
+populateSubjects();
+
+// =========================================
+// GET CURRENTLY SELECTED SUBJECTS
+// =========================================
+
+function getSelectedSubjects(){
+
+    let selected=[];
+
+    for(let i=1;i<=4;i++){
+
+        let value=document.getElementById("s"+i).value;
+
+        if(value!=="")
+            selected.push(value);
+
+    }
+
+    return selected;
+
+}
+
+
+// =========================================
+// CHECK WHETHER SUBJECT IS ALLOWED
+// =========================================
+
+function isAllowed(candidate,currentDropdown){
+
+    let selected=getSelectedSubjects();
+
+    // Remove the current dropdown's own value
+    let currentValue=currentDropdown.value;
+
+    selected=selected.filter(s=>s!==currentValue);
+
+    // Duplicate not allowed
+    if(selected.includes(candidate))
+        return false;
+
+    // Only one practical subject
+    let practicalCount=selected.filter(s=>practicalSubjects.includes(s)).length;
+
+    if(practicalSubjects.includes(candidate) && practicalCount>=1)
+        return false;
+
+    // Conflict rules
+    for(let s of selected){
+
+        if(conflictRules[s] && conflictRules[s].includes(candidate))
+            return false;
+
+        if(conflictRules[candidate] && conflictRules[candidate].includes(s))
+            return false;
+
+    }
+
+    return true;
+
+}
+
+
+// =========================================
+// REFRESH ALL DROPDOWNS
+// =========================================
+
+function refreshDropdowns(){
+
+    for(let i=1;i<=4;i++){
+
+        let ddl=document.getElementById("s"+i);
+
+        for(let option of ddl.options){
+
+            if(option.value==="")
+                continue;
+
+            if(option.value===ddl.value){
+
+                option.disabled=false;
+                continue;
+
+            }
+
+            option.disabled=!isAllowed(option.value,ddl);
+
+        }
+
+    }
+
+    updateStatus();
+
+}
+
+
+// =========================================
+// STATUS PANEL
+// =========================================
+
+function updateStatus(){
+
+    let list=document.getElementById("statusList");
+
+    list.innerHTML="";
+
+    let selected=getSelectedSubjects();
+
+    // Duplicate check
+    let duplicates=selected.filter((v,i)=>selected.indexOf(v)!==i);
+
+    if(duplicates.length){
+
+        let li=document.createElement("li");
+
+        li.textContent="Duplicate subjects selected.";
+
+        list.appendChild(li);
+
+    }
+
+    // Practical rule
+    let practical=selected.filter(x=>practicalSubjects.includes(x));
+
+    if(practical.length>1){
+
+        let li=document.createElement("li");
+
+        li.textContent="Only one Practical subject is allowed.";
+
+        list.appendChild(li);
+
+    }
+
+    // Conflict rules
+    selected.forEach(subject=>{
+
+        if(conflictRules[subject]){
+
+            conflictRules[subject].forEach(conflict=>{
+
+                if(selected.includes(conflict)){
+
+                    let li=document.createElement("li");
+
+                    li.textContent=subject+" cannot be taken with "+conflict;
+
+                    list.appendChild(li);
+
+                }
+
+            });
+
+        }
+
+    });
+
+    if(list.children.length===0){
+
+        let li=document.createElement("li");
+
+        li.textContent="No rule violations detected.";
+
+        list.appendChild(li);
+
+    }
+
+    document.getElementById("status").style.display="block";
+
+}
+
+
+// =========================================
+// RESET BUTTON
+// =========================================
+
+document.getElementById("resetBtn").onclick=function(){
+
+    document.getElementById("mil").selectedIndex=0;
+
+    for(let i=1;i<=4;i++){
+
+        document.getElementById("s"+i).selectedIndex=0;
+
+    }
+
+    document.getElementById("result").style.display="none";
+
+    document.getElementById("status").style.display="none";
+
+    refreshDropdowns();
+
+};
+
+
+// =========================================
+// ATTACH EVENTS
+// =========================================
+
+document.getElementById("mil").addEventListener("change",refreshDropdowns);
+
+for(let i=1;i<=4;i++){
+
+    document
+        .getElementById("s"+i)
+        .addEventListener("change",refreshDropdowns);
+
+}
+
+
+// Initial refresh
+refreshDropdowns();
+
+// =========================================
+// GET ALLOWED SECTIONS
+// =========================================
+
+function getAllowedSections(subject){
+
+    if(sectionRestriction[subject])
+        return sectionRestriction[subject];
+
+    return ["A","B","C","D"];
+
+}
+
+
+// =========================================
+// FIND COMMON SECTION
+// =========================================
+
+function calculateSections(){
+
+    let common=["A","B","C","D"];
+
+    let selected=getSelectedSubjects();
+
+    selected.forEach(subject=>{
+
+        let allowed=getAllowedSections(subject);
+
+        common=common.filter(x=>allowed.includes(x));
+
+    });
+
+    return common;
+
+}
+
+
+// =========================================
+// CHECK IF COMBINATION IS VALID
+// =========================================
+
+function validateCombination(){
+
+    let selected=getSelectedSubjects();
+
+    // MIL compulsory
+
+    if(document.getElementById("mil").value===""){
+
+        return{
+
+            valid:false,
+
+            message:"Please select one MIL."
+
+        };
+
+    }
+
+    // Four subjects compulsory
+
+    if(selected.length!=4){
+
+        return{
+
+            valid:false,
+
+            message:"Please select all four subjects."
+
+        };
+
+    }
+
+    // Duplicate check
+
+    if(new Set(selected).size!=selected.length){
+
+        return{
+
+            valid:false,
+
+            message:"Duplicate subjects are not allowed."
+
+        };
+
+    }
+
+    // Practical rule
+
+    let practicalCount=selected.filter(
+        x=>practicalSubjects.includes(x)
+    ).length;
+
+    if(practicalCount>1){
+
+        return{
+
+            valid:false,
+
+            message:"Only one Practical subject can be selected."
+
+        };
+
+    }
+
+    // Conflict rules
+
+    for(let subject of selected){
+
+        if(conflictRules[subject]){
+
+            for(let conflict of conflictRules[subject]){
+
+                if(selected.includes(conflict)){
+
+                    return{
+
+                        valid:false,
+
+                        message:subject+
+                        " cannot be taken with "+
+                        conflict
+
+                    };
+
+                }
+
+            }
+
+        }
+
+    }
+
+    // Section calculation
+
+    let sections=calculateSections();
+
+    if(sections.length===0){
+
+        return{
+
+            valid:false,
+
+            message:"No eligible section available."
+
+        };
+
+    }
+
+    return{
+
+        valid:true,
+
+        sections:sections
+
+    };
+
+}
+
+
+
+// =========================================
+// CHECK BUTTON
+// =========================================
+
+document.getElementById("checkBtn").onclick=function(){
+
+    let result=document.getElementById("result");
+
+    let output=validateCombination();
+
+    result.style.display="block";
+
+    if(output.valid){
+
+        result.className="valid";
+
+        result.innerHTML=
+        "<h3>✓ VALID COMBINATION</h3><br>"+
+        "<b>Eligible Section(s): </b>"+
+        output.sections.join(", ");
+
+    }
+
+    else{
+
+        result.className="invalid";
+
+        result.innerHTML=
+        "<h3>✖ INVALID COMBINATION</h3><br>"+
+        output.message;
+
+    }
+
+}
+
+const rules = [
+  {
+    subject: "Psychology",
+    allowedSections: ["A"],
+    conflicts: ["Music", "Retail", "IT & ITES"]
+  },
+  {
+    subject: "Music",
+    allowedSections: ["C"],
+    conflicts: ["Psychology", "Retail"]
+  }
+];
+
+</script>
+</body>
+
+</html>
